@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Inter as FontSans } from "next/font/google";
+import "@/src/style/globals.css";
+import { cn } from "@/src/lib/utils";
+import { ThemeProvider } from "@/src/components/theme-provider";
+import { SessionProvider } from "next-auth/react";
+import Header from "@/src/components/header";
+import { TooltipProvider } from "@/src/components/ui/tooltip";
+import SideBar from "@/src/components/aside";
+import Footer from "@/src/components/forrter";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +25,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        suppressHydrationWarning
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased flex flex-col",
+          fontSans.variable
+        )}
+      >
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TooltipProvider>
+              <SideBar />
+              <div className="flex flex-1 flex-col gap-4 py-4 pl-14">
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </TooltipProvider>
+          </ThemeProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }
