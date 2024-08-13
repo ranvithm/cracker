@@ -37,7 +37,7 @@ const Model = () => {
         <div className="flex flex-1 overflow-auto">
           <ul className="flex-grow overflow-auto py-4">
             {cartsList.map((cart) => (
-              <li className="flex w-full flex-col border-b ">
+              <li key={cart.id} className="flex w-full flex-col border-b ">
                 <div className="relative flex w-full flex-row justify-between px-1 py-4">
                   <Button
                     className="absolute z-40 h-6 w-6 shadow rounded-full bg-primary/60 hover:bg-primary -ml-1 -mt-2"

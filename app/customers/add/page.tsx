@@ -95,7 +95,7 @@ const CreateCustomer = () => {
             <CardContent>
               <div className="grid gap-6 grid-cols-2">
                 {customersField.map((item) => (
-                  <div className="grid gap-3">
+                  <div key={item.name} className="grid gap-3">
                     <FormField
                       control={form.control}
                       // @ts-ignore
