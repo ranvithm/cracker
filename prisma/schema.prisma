@@ -39,27 +39,36 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String            @id @unique @default(cuid())
   name        String
   description String?
   price       Float
   category    String
   images      Json?
-  Order       Order[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  orders      orderAndProduct[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model orderAndProduct {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  Order     Order   @relation(fields: [orderId], references: [id])
+  Product   Product @relation(fields: [productId], references: [id])
 }
 
 model Order {
-  id         String    @id @default(cuid())
+  id         String            @id @default(cuid())
   userId     String
   total      Float
-  products   Product[]
   customerId String?
-  Customer   Customer? @relation(fields: [customerId], references: [id])
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  products   orderAndProduct[]
+  Customer   Customer?         @relation(fields: [customerId], references: [id])
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 model Customer {

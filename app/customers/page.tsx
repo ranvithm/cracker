@@ -21,7 +21,7 @@ import Link from "next/link";
 import { MdAdd, MdOutlineSearch } from "react-icons/md";
 
 const Customers = async () => {
-  const products = await getAllCustomers();
+  const customers = await getAllCustomers();
 
   return (
     <div className="flex flex-1 flex-col p-4 gap-4">
@@ -60,13 +60,13 @@ const Customers = async () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.state}</TableCell>
-                  <TableCell>{product.country}</TableCell>
-                  <TableCell>{product.email}</TableCell>
-                  <TableCell className="text-right">{product.phone}</TableCell>
+              {customers.map((customer) => (
+                <TableRow key={customer.id}>
+                  <TableCell className="font-medium">{customer.name}</TableCell>
+                  <TableCell>{customer.state}</TableCell>
+                  <TableCell>{customer.country}</TableCell>
+                  <TableCell>{customer.email}</TableCell>
+                  <TableCell className="text-right">{customer.phone}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
