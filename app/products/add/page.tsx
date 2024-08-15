@@ -27,8 +27,10 @@ import Link from "next/link";
 import { cn } from "@/src/lib/utils";
 import { addProduct } from "@/src/service/actions/product";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const CreateProductPage = () => {
+  const [file, setFile] = useState<File | null>(null);
   const router = useRouter();
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
@@ -38,12 +40,34 @@ const CreateProductPage = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
-    const _res = await addProduct(data);
-    console.log(_res);
-    router.push("/products");
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(`/api/product`, {
+        method: "POST",
+        body: formData,
+      });
+      const image = await response.json();
+      const _data = { ...data, images: [image.filePath] };
+      const _res = await addProduct(_data);
+      console.log(_res);
+      router.push("/products");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [image, ...images] = form.getValues("images");
+
+  const uploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setFile(file);
+  };
+
+  const tempImage = file ? URL.createObjectURL(file) : image;
 
   return (
     <div className="w-full p-6 grid flex-1 gap-4">
@@ -144,22 +168,10 @@ const CreateProductPage = () => {
                   alt="Product image"
                   className="aspect-square w-full rounded-md object-cover"
                   height="100"
-                  src={image}
+                  src={tempImage}
                   width="100"
                 />
                 <div className="grid grid-cols-3 gap-2">
-                  {images &&
-                    images.map((im, i) => (
-                      <button key={i}>
-                        <Image
-                          alt="Product image"
-                          className="aspect-square w-full rounded-md object-cover"
-                          height="84"
-                          src={im}
-                          width="84"
-                        />
-                      </button>
-                    ))}
                   <div
                     className={cn(
                       buttonVariants({ variant: "outline" }),
@@ -170,6 +182,7 @@ const CreateProductPage = () => {
                       type="file"
                       className="opacity-0 absolute h-full w-full"
                       accept="image/*"
+                      onChange={uploadImage}
                     />
                     <UploadIcon className="h-4 w-4 text-muted-foreground" />
                     <span className="sr-only">Upload</span>
