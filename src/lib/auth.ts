@@ -18,6 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return !!auth;
     },
   },
+  trustHost: true,
   providers: [
     google({
       authorization: {
