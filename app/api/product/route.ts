@@ -5,8 +5,6 @@ import { writeFile } from "fs/promises";
 
 export const POST = async (req) => {
   const formData = await req.formData();
-
-
   const file = formData.get("file");
   console.log(file);
   
@@ -31,10 +29,4 @@ export const POST = async (req) => {
     console.log("Error occurred ", error);
     return NextResponse.json({ message: "Failed", status: 500 });
   }
-};
-
-export const config = {
-  api: {
-    bodyParser: false, // Disallow body parsing, consume as stream
-  },
 };
