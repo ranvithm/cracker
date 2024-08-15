@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +12,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "../lib/auth";
 import { Label } from "./ui/label";
-import Link from "next/link";
 import ToggleTheme from "./toggle-theme";
 
 const Header = async () => {
   const { user } = (await auth()) || {};
   if (!user) {
-    return null;
+    return redirect("/api/auth/signin");
   }
 
   return (

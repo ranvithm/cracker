@@ -8,6 +8,7 @@ import ProductNav from "@/src/components/product-nav";
 
 const Home = async () => {
   const products = await getAllProducts();
+
   return products.length > 3 ? (
     <main className="flex flex-1 flex-col">
       <ProductNav />
