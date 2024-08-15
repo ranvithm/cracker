@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import { writeFile } from "fs/promises";
 
-export const POST = async (req) => {
+export const POST = async (req: any) => {
   const formData = await req.formData();
   const file = formData.get("file");
   console.log(file);
