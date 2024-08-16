@@ -1,9 +1,9 @@
-import {  NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import { writeFile } from "fs/promises";
 
-export const POST = async (req: any) => {
+export const POST = async (req: NextRequest) => {
   const formData = await req.formData();
   const file = formData.get("file");
   console.log(file);
@@ -12,9 +12,9 @@ export const POST = async (req: any) => {
     return NextResponse.json({ error: "No files received." }, { status: 400 });
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const extension = file.name.split(".").pop();
-  const filename = `${uuidv4()}.${extension}`; // Removed space after dot
+  const buffer = Buffer.from(await (file as Blob).arrayBuffer());
+  const extension = (file as File).name.split(".").pop();
+  const filename = `${uuidv4()}.${extension}`;
   try {
     await writeFile(
       path.join(process.cwd(), "public/" + filename),
